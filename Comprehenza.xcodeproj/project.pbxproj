@@ -1,0 +1,380 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0DB050138C7292A38483A57B = {isa = PBXBuildFile; fileRef = 367F69F5F5399E15B8B0B5AF; };
+		16F6EB67D3BBD9418EE8D7A6 = {isa = PBXBuildFile; fileRef = 5DA5937D8BCEDFE3B29D8712; };
+		12C416AB4F9BDF576964AECB = {isa = PBXBuildFile; fileRef = D096FE2E1DCBBF49EA432166; };
+		5ADB15BDD7A5D4DE2D57F60A = {isa = PBXBuildFile; fileRef = F3CCA978D7298DE49A08766E; };
+		816B1F2323614C2D397C764E = {isa = PBXBuildFile; fileRef = 334DE4826011A2D392B0B0C5; };
+		6E7B13849723554DBC1FE412 = {isa = PBXBuildFile; fileRef = A7568A407DFCA88EB4AAFC4A; };
+		5FC6F0DEFAF01EF00D6F6027 = {isa = PBXBuildFile; fileRef = AF25FAF017CB52CB37E9C5E1; };
+		E4E8CF5A9A9114786A2A4289 = {isa = PBXBuildFile; fileRef = 1127F339D24455E080E817F8; };
+		A3FFE6EC3426B59802F668C0 = {isa = PBXBuildFile; fileRef = CD99C58A75F905D0C58CDC02; };
+		8109FA978BC4A828DD117679 = {isa = PBXBuildFile; fileRef = 006DFE866F25D591AF87EA3D; };
+		F90DA6E2E45DD547ABD26B64 = {isa = PBXBuildFile; fileRef = 98AD8206FD6CFCFCD9749280; };
+		B5546C90906F6BAF53506EA9 = {isa = PBXBuildFile; fileRef = 489558BA9A14D9E7AEA125B6; };
+		F1C13C574CEE808FE2D0D0F1 = {isa = PBXBuildFile; fileRef = B1D0B0F01ECDC82DCE02E083; };
+		7F3FD03553577198FF8DAFCA = {isa = PBXBuildFile; fileRef = 83410CA8A6F8C0D1EB877D07; };
+		28C17A76CB884723F76C3A1A = {isa = PBXBuildFile; fileRef = 4CB0D8C4A2EE98FFBAF8F542; };
+		864597A87667809EB03F8677 = {isa = PBXBuildFile; fileRef = 564D1C79DBB7922DD4AB5790; };
+		AF9B8A74D517E90B8AC0CB12 = {isa = PBXBuildFile; fileRef = D48918C9FC8E15EAA3F24693; };
+		7CD34B265A7518A029AECA10 = {isa = PBXBuildFile; fileRef = E5AD853C2D8DAB90E6F41507; };
+		BD6983184354B52B1386DA72 = {isa = PBXBuildFile; fileRef = D5B76635492CC7F6109B0A28; };
+		C2FE57FB24BCC93353A8EFAC = {isa = PBXBuildFile; fileRef = C11B759A94684B697C35529C; };
+		CBAA9F2E19BDFD60C4780A9D = {isa = PBXBuildFile; fileRef = 3448975FAD0EE3EC53593A9E; };
+		4B22AA449E9564A9F5BBCC63 = {isa = PBXBuildFile; fileRef = 685583437F248A204939B6A6; };
+		A60A92E8782551DB1273A1CE = {isa = PBXBuildFile; fileRef = C7A50DD6BCCF763B9728868E; };
+		3BF5806E082D7986A51742E9 = {isa = PBXBuildFile; fileRef = 84EE0FF77CCCA7B7FA70411D; };
+		CB5010A244FED961393B6487 = {isa = PBXBuildFile; fileRef = BC67CA4D9D2EC78484480382; };
+		86D951DB96E348DBB847BC9C = {isa = PBXBuildFile; fileRef = 29F6B0A1D644404F4F59B06D; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		DA8333966D7DC909F38E13E8 = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Comprehenza.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		367F69F5F5399E15B8B0B5AF = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ComprehenzaApp.swift"; path = "Comprehenza/ComprehenzaApp.swift"; sourceTree = SOURCE_ROOT; };
+		A876D4C5027EDFCA822F43A9 = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info.plist"; path = "Comprehenza/Info.plist"; sourceTree = SOURCE_ROOT; };
+		5DA5937D8BCEDFE3B29D8712 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ExerciseContent.swift"; path = "Comprehenza/Models/ExerciseContent.swift"; sourceTree = SOURCE_ROOT; };
+		D096FE2E1DCBBF49EA432166 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ScoreEngine.swift"; path = "Comprehenza/Models/ScoreEngine.swift"; sourceTree = SOURCE_ROOT; };
+		F3CCA978D7298DE49A08766E = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "User.swift"; path = "Comprehenza/Models/User.swift"; sourceTree = SOURCE_ROOT; };
+		334DE4826011A2D392B0B0C5 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "DesignSystem.swift"; path = "Comprehenza/Utilities/DesignSystem.swift"; sourceTree = SOURCE_ROOT; };
+		A7568A407DFCA88EB4AAFC4A = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SpeechRecognizer.swift"; path = "Comprehenza/Utilities/SpeechRecognizer.swift"; sourceTree = SOURCE_ROOT; };
+		AF25FAF017CB52CB37E9C5E1 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "AppState.swift"; path = "Comprehenza/ViewModels/AppState.swift"; sourceTree = SOURCE_ROOT; };
+		1127F339D24455E080E817F8 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ForgotPasswordView.swift"; path = "Comprehenza/Views/Auth/ForgotPasswordView.swift"; sourceTree = SOURCE_ROOT; };
+		CD99C58A75F905D0C58CDC02 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "LoginView.swift"; path = "Comprehenza/Views/Auth/LoginView.swift"; sourceTree = SOURCE_ROOT; };
+		006DFE866F25D591AF87EA3D = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "OnboardingView.swift"; path = "Comprehenza/Views/Auth/OnboardingView.swift"; sourceTree = SOURCE_ROOT; };
+		98AD8206FD6CFCFCD9749280 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "RegisterView.swift"; path = "Comprehenza/Views/Auth/RegisterView.swift"; sourceTree = SOURCE_ROOT; };
+		489558BA9A14D9E7AEA125B6 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SplashView.swift"; path = "Comprehenza/Views/Auth/SplashView.swift"; sourceTree = SOURCE_ROOT; };
+		B1D0B0F01ECDC82DCE02E083 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ComprehensionTestView.swift"; path = "Comprehenza/Views/Evaluation/ComprehensionTestView.swift"; sourceTree = SOURCE_ROOT; };
+		83410CA8A6F8C0D1EB877D07 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "EvaluationIntroView.swift"; path = "Comprehenza/Views/Evaluation/EvaluationIntroView.swift"; sourceTree = SOURCE_ROOT; };
+		4CB0D8C4A2EE98FFBAF8F542 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "EvaluationResultView.swift"; path = "Comprehenza/Views/Evaluation/EvaluationResultView.swift"; sourceTree = SOURCE_ROOT; };
+		564D1C79DBB7922DD4AB5790 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FluencyTestView.swift"; path = "Comprehenza/Views/Evaluation/FluencyTestView.swift"; sourceTree = SOURCE_ROOT; };
+		D48918C9FC8E15EAA3F24693 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ReLearningTestView.swift"; path = "Comprehenza/Views/Evaluation/ReLearningTestView.swift"; sourceTree = SOURCE_ROOT; };
+		E5AD853C2D8DAB90E6F41507 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "VocabularyTestView.swift"; path = "Comprehenza/Views/Evaluation/VocabularyTestView.swift"; sourceTree = SOURCE_ROOT; };
+		D5B76635492CC7F6109B0A28 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "JourneyView.swift"; path = "Comprehenza/Views/Journey/JourneyView.swift"; sourceTree = SOURCE_ROOT; };
+		C11B759A94684B697C35529C = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ExerciseFlowView.swift"; path = "Comprehenza/Views/Library/ExerciseFlowView.swift"; sourceTree = SOURCE_ROOT; };
+		3448975FAD0EE3EC53593A9E = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "LibraryView.swift"; path = "Comprehenza/Views/Library/LibraryView.swift"; sourceTree = SOURCE_ROOT; };
+		685583437F248A204939B6A6 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MainTabView.swift"; path = "Comprehenza/Views/Main/MainTabView.swift"; sourceTree = SOURCE_ROOT; };
+		C7A50DD6BCCF763B9728868E = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ProfileView.swift"; path = "Comprehenza/Views/Profile/ProfileView.swift"; sourceTree = SOURCE_ROOT; };
+		84EE0FF77CCCA7B7FA70411D = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ProgressView.swift"; path = "Comprehenza/Views/Progress/ProgressView.swift"; sourceTree = SOURCE_ROOT; };
+		BC67CA4D9D2EC78484480382 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ReadBuddyView.swift"; path = "Comprehenza/Views/ReadBuddy/ReadBuddyView.swift"; sourceTree = SOURCE_ROOT; };
+		29F6B0A1D644404F4F59B06D = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "Assets.xcassets"; path = "Comprehenza/Assets.xcassets"; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CF3E9D45861DF8C96E46B79D = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1C0AE8B4B633AFFB6F6174C2 = {
+			isa = PBXGroup;
+			children = (
+				DCEF5A10AF865A8C955EDDF1,
+				B791A7409DFEB0CC79668611,
+			);
+			sourceTree = "<group>";
+		};
+		B791A7409DFEB0CC79668611 = {
+			isa = PBXGroup;
+			children = (
+				DA8333966D7DC909F38E13E8,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DCEF5A10AF865A8C955EDDF1 = {
+			isa = PBXGroup;
+			children = (
+				29F6B0A1D644404F4F59B06D,
+				686112FED61DF89CE660214A,
+				13CC8DE9A4BE00490C28B798,
+				0232BFABD04DC856EB8CEC5E,
+				367F69F5F5399E15B8B0B5AF,
+				A876D4C5027EDFCA822F43A9,
+			);
+			path = "Comprehenza";
+			sourceTree = "<group>";
+		};
+		686112FED61DF89CE660214A = {
+			isa = PBXGroup;
+			children = (
+				5DA5937D8BCEDFE3B29D8712,
+				D096FE2E1DCBBF49EA432166,
+				F3CCA978D7298DE49A08766E,
+			);
+			path = "Models";
+			sourceTree = "<group>";
+		};
+		13CC8DE9A4BE00490C28B798 = {
+			isa = PBXGroup;
+			children = (
+				334DE4826011A2D392B0B0C5,
+				A7568A407DFCA88EB4AAFC4A,
+			);
+			path = "Utilities";
+			sourceTree = "<group>";
+		};
+		0232BFABD04DC856EB8CEC5E = {
+			isa = PBXGroup;
+			children = (
+				AF25FAF017CB52CB37E9C5E1,
+			);
+			path = "ViewModels";
+			sourceTree = "<group>";
+		};
+		9603E345C328ECC5B10118BB = {
+			isa = PBXGroup;
+			children = (
+				1127F339D24455E080E817F8,
+				CD99C58A75F905D0C58CDC02,
+				006DFE866F25D591AF87EA3D,
+				98AD8206FD6CFCFCD9749280,
+				489558BA9A14D9E7AEA125B6,
+			);
+			path = "Auth";
+			sourceTree = "<group>";
+		};
+		920F745CA55684E5B0FA0FE9 = {
+			isa = PBXGroup;
+			children = (
+				B1D0B0F01ECDC82DCE02E083,
+				83410CA8A6F8C0D1EB877D07,
+				4CB0D8C4A2EE98FFBAF8F542,
+				564D1C79DBB7922DD4AB5790,
+				D48918C9FC8E15EAA3F24693,
+				E5AD853C2D8DAB90E6F41507,
+			);
+			path = "Evaluation";
+			sourceTree = "<group>";
+		};
+		9D7AE794E40851CDDD596214 = {
+			isa = PBXGroup;
+			children = (
+				D5B76635492CC7F6109B0A28,
+			);
+			path = "Journey";
+			sourceTree = "<group>";
+		};
+		62337D464CCB9ACB34FE31BD = {
+			isa = PBXGroup;
+			children = (
+				C11B759A94684B697C35529C,
+				3448975FAD0EE3EC53593A9E,
+			);
+			path = "Library";
+			sourceTree = "<group>";
+		};
+		79BB39DE401878ABECD1FC98 = {
+			isa = PBXGroup;
+			children = (
+				685583437F248A204939B6A6,
+			);
+			path = "Main";
+			sourceTree = "<group>";
+		};
+		6A32602479E56A39E5D9EEFF = {
+			isa = PBXGroup;
+			children = (
+				C7A50DD6BCCF763B9728868E,
+			);
+			path = "Profile";
+			sourceTree = "<group>";
+		};
+		8E1E6691FC1A99CC7DF9B113 = {
+			isa = PBXGroup;
+			children = (
+				84EE0FF77CCCA7B7FA70411D,
+			);
+			path = "Progress";
+			sourceTree = "<group>";
+		};
+		7BD7E57B1DC61358028F8212 = {
+			isa = PBXGroup;
+			children = (
+				BC67CA4D9D2EC78484480382,
+			);
+			path = "ReadBuddy";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		748BADFF5E47EF3030E81AF2 = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 819D237A33EC3F3142A9E9A8;
+			buildPhases = (
+				AEFF538ED755C768CB265BC7,
+				CF3E9D45861DF8C96E46B79D,
+				804525BE7D6FAA5BDA5192F6,
+			);
+			buildRules = ();
+			dependencies = ();
+			name = Comprehenza;
+			productName = Comprehenza;
+			productReference = DA8333966D7DC909F38E13E8;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		832EC138C07AD4B98D0C3B11 = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					748BADFF5E47EF3030E81AF2 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = B9B9657CFEBF7C60F2BE2F54;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (en, Base);
+			mainGroup = 1C0AE8B4B633AFFB6F6174C2;
+			productRefGroup = B791A7409DFEB0CC79668611;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (748BADFF5E47EF3030E81AF2);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		804525BE7D6FAA5BDA5192F6 = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				86D951DB96E348DBB847BC9C,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AEFF538ED755C768CB265BC7 = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0DB050138C7292A38483A57B,
+				16F6EB67D3BBD9418EE8D7A6,
+				12C416AB4F9BDF576964AECB,
+				5ADB15BDD7A5D4DE2D57F60A,
+				816B1F2323614C2D397C764E,
+				6E7B13849723554DBC1FE412,
+				5FC6F0DEFAF01EF00D6F6027,
+				E4E8CF5A9A9114786A2A4289,
+				A3FFE6EC3426B59802F668C0,
+				8109FA978BC4A828DD117679,
+				F90DA6E2E45DD547ABD26B64,
+				B5546C90906F6BAF53506EA9,
+				F1C13C574CEE808FE2D0D0F1,
+				7F3FD03553577198FF8DAFCA,
+				28C17A76CB884723F76C3A1A,
+				864597A87667809EB03F8677,
+				AF9B8A74D517E90B8AC0CB12,
+				7CD34B265A7518A029AECA10,
+				BD6983184354B52B1386DA72,
+				C2FE57FB24BCC93353A8EFAC,
+				CBAA9F2E19BDFD60C4780A9D,
+				4B22AA449E9564A9F5BBCC63,
+				A60A92E8782551DB1273A1CE,
+				3BF5806E082D7986A51742E9,
+				CB5010A244FED961393B6487,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		4527D6C9A5509F5737468F51 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		640542C736C7338C7584F6DC = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		899D6299E65A7007867FEACE = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Comprehenza/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.comprehenza.app;
+				PRODUCT_NAME = Comprehenza;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		C8F988D603CF9A4AE3FF4CB2 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Comprehenza/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.comprehenza.app;
+				PRODUCT_NAME = Comprehenza;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B9B9657CFEBF7C60F2BE2F54 = {
+			isa = XCConfigurationList;
+			buildConfigurations = (4527D6C9A5509F5737468F51, 640542C736C7338C7584F6DC);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		819D237A33EC3F3142A9E9A8 = {
+			isa = XCConfigurationList;
+			buildConfigurations = (899D6299E65A7007867FEACE, C8F988D603CF9A4AE3FF4CB2);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+	};
+	rootObject = 832EC138C07AD4B98D0C3B11;
+}

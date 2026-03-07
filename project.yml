@@ -1,0 +1,49 @@
+name: Comprehenza
+options:
+  bundleIdPrefix: com.comprehenza
+  deploymentTarget:
+    iOS: "16.0"
+  xcodeVersion: "15.0"
+  defaultConfig: Debug
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    IPHONEOS_DEPLOYMENT_TARGET: "16.0"
+    TARGETED_DEVICE_FAMILY: "1"
+    PRODUCT_BUNDLE_IDENTIFIER: com.comprehenza.app
+    PRODUCT_NAME: Comprehenza
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+
+targets:
+  Comprehenza:
+    type: application
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - path: Comprehenza
+    info:
+      path: Comprehenza/Info.plist
+      properties:
+        UILaunchScreen:
+          UIColorName: ""
+          UIImageName: ""
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        NSMicrophoneUsageDescription: "Comprehenza needs microphone access to test your reading fluency."
+        NSSpeechRecognitionUsageDescription: "Comprehenza uses speech recognition to give real-time feedback on your reading."
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+    settings:
+      base:
+        INFOPLIST_FILE: Comprehenza/Info.plist
+    dependencies: []
+    scheme:
+      testTargets: []
+      gatherCoverageData: false
