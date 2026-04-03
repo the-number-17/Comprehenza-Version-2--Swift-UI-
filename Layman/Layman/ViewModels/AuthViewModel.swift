@@ -9,6 +9,15 @@ final class AuthViewModel: ObservableObject {
     @Published var currentUserEmail: String?
     @Published var showEmailConfirmation = false
     @Published var confirmationEmail: String?
+    @Published var profile: UserProfile?
+    
+    struct UserProfile: Codable {
+        let id: UUID
+        let full_name: String?
+        let age: String?
+        let phone: String?
+        let email: String?
+    }
     
     private let supabase = SupabaseManager.shared.client
     
@@ -30,10 +39,12 @@ final class AuthViewModel: ObservableObject {
                         self.isAuthenticated = true
                         self.currentUserEmail = session.user.email
                         self.showEmailConfirmation = false
+                        await self.fetchProfile()
                     }
                 } else if event == .signedOut {
                     self.isAuthenticated = false
                     self.currentUserEmail = nil
+                    self.profile = nil
                 }
             }
         }
@@ -114,6 +125,7 @@ final class AuthViewModel: ObservableObject {
             )
             currentUserEmail = session.user.email
             isAuthenticated = true
+            await fetchProfile()
         } catch {
             print("⚠️ Sign In Error: \(error)")
             errorMessage = simplifyError(error)
@@ -122,12 +134,32 @@ final class AuthViewModel: ObservableObject {
         isLoading = false
     }
     
+    // MARK: - Profile Management
+    func fetchProfile() async {
+        do {
+            let user = try await supabase.auth.session.user
+            let profile: UserProfile = try await supabase
+                .from("profiles")
+                .select()
+                .eq("id", value: user.id)
+                .single()
+                .execute()
+                .value
+            
+            self.profile = profile
+            print("👤 Profile Loaded: \(profile.full_name ?? "No Name")")
+        } catch {
+            print("⚠️ Profile Fetch Error: \(error)")
+        }
+    }
+    
     // MARK: - Sign Out
     func signOut() async {
         do {
             try await supabase.auth.signOut()
             isAuthenticated = false
             currentUserEmail = nil
+            profile = nil
         } catch {
             errorMessage = "Couldn't sign out. Try again."
         }

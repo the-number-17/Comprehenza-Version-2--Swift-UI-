@@ -12,7 +12,7 @@ final class ArticlesViewModel: ObservableObject {
     @Published var isEnhancingWithAI = false
     
     private let newsService = NewsService.shared
-    private let geminiService = GeminiService.shared
+    private let aiService = AIService.shared
     private let supabase = SupabaseManager.shared.client
     private var savedArticleIds: Set<String> = []
     
@@ -77,7 +77,7 @@ final class ArticlesViewModel: ObservableObject {
         do {
             // 1. Simplify Headline (if missing)
             if allArticles[index].laymanTitle.isEmpty {
-                let simpleHeadline = try await geminiService.simplifyHeadline(article.title)
+                let simpleHeadline = try await aiService.simplifyHeadline(article.title)
                 if !simpleHeadline.isEmpty {
                     allArticles[index].laymanTitle = simpleHeadline
                 }
@@ -86,7 +86,7 @@ final class ArticlesViewModel: ObservableObject {
             // 2. Generate Summary Cards (if missing)
             if allArticles[index].laymanCards.isEmpty {
                 let content = article.content ?? article.description ?? article.title
-                let cards = try await geminiService.generateContentCards(for: content)
+                let cards = try await aiService.generateContentCards(for: content)
                 if !cards.isEmpty {
                     allArticles[index].laymanCards = cards
                 }
@@ -95,7 +95,7 @@ final class ArticlesViewModel: ObservableObject {
             // 3. Expand Full Story (if missing or truncated)
             let currentContent = allArticles[index].content ?? ""
             if allArticles[index].expandedContent == nil && (currentContent.count < 1000 || currentContent.contains("PAID PLANS")) {
-                let expandedContent = try await geminiService.expandFullStory(
+                let expandedContent = try await aiService.expandFullStory(
                     title: article.title,
                     description: article.description ?? "",
                     partialContent: article.content

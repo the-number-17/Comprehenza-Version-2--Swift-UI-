@@ -7,7 +7,7 @@ final class ChatViewModel: ObservableObject {
     @Published var inputText = ""
     @Published var isLoading = false
     
-    private let geminiService = GeminiService.shared
+    private let aiService = AIService.shared
     private let article: Article
     private let articlesViewModel: ArticlesViewModel
     
@@ -62,7 +62,7 @@ final class ChatViewModel: ObservableObject {
         isLoading = true
         
         do {
-            let response = try await geminiService.sendMessage(text, articleContext: articleContext)
+            let response = try await aiService.sendMessage(text, articleContext: articleContext)
             let botMessage = ChatMessage(content: response, isUser: false)
             messages.append(botMessage)
         } catch {
@@ -91,7 +91,7 @@ final class ChatViewModel: ObservableObject {
                 ? (article.description ?? article.title)
                 : article.laymanCards.joined(separator: " ")
             
-            let questions = try await geminiService.generateSuggestions(
+            let questions = try await aiService.generateSuggestions(
                 for: article.laymanTitle.isEmpty ? article.title : article.laymanTitle,
                 articleContent: content
             )

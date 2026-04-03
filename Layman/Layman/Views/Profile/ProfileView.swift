@@ -43,8 +43,8 @@ struct ProfileView: View {
                         
                         // User info
                         VStack(spacing: 6) {
-                            Text(authViewModel.currentUserEmail ?? "User")
-                                .font(LaymanFont.headline(16))
+                            Text(authViewModel.profile?.full_name ?? authViewModel.currentUserEmail ?? "User")
+                                .font(LaymanFont.headline(18))
                                 .foregroundColor(.laymanDark)
                             
                             Text("Reader")
@@ -54,7 +54,13 @@ struct ProfileView: View {
                         
                         // Info cards
                         VStack(spacing: 12) {
+                            profileRow(icon: "person.fill", title: "Full Name", value: authViewModel.profile?.full_name ?? "—")
                             profileRow(icon: "envelope.fill", title: "Email", value: authViewModel.currentUserEmail ?? "—")
+                            profileRow(icon: "calendar", title: "Age", value: authViewModel.profile?.age ?? "—")
+                            profileRow(icon: "phone.fill", title: "Phone", value: authViewModel.profile?.phone ?? "—")
+                            
+                            Divider().padding(.vertical, 8)
+                            
                             profileRow(icon: "info.circle.fill", title: "App Version", value: "1.0.0")
                             profileRow(icon: "doc.text.fill", title: "Terms of Service", value: "")
                             profileRow(icon: "shield.fill", title: "Privacy Policy", value: "")
@@ -112,6 +118,13 @@ struct ProfileView: View {
     }
     
     private var initials: String {
+        if let name = authViewModel.profile?.full_name, !name.isEmpty {
+            let parts = name.split(separator: " ")
+            if let first = parts.first?.prefix(1), let last = parts.last?.prefix(1), parts.count > 1 {
+                return (String(first) + String(last)).uppercased()
+            }
+            return String(name.prefix(1)).uppercased()
+        }
         guard let email = authViewModel.currentUserEmail else { return "?" }
         return String(email.prefix(1)).uppercased()
     }
