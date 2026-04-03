@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Question For You...</title>
+  <meta name="description" content="A special question, just for you." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Detective / Tense Background Particles -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Red flash overlay for wrong answer -->
+  <div id="red-flash"></div>
+
+  <!-- Valentine celebration canvas (hidden initially) -->
+  <canvas id="celebration-canvas"></canvas>
+
+  <!-- Main Content -->
+  <div id="main-container">
+    <div id="card">
+      <div id="icon-area">
+        <span id="detective-icon">🔍</span>
+        <span id="love-icon" class="hidden">💕</span>
+      </div>
+      <h1 id="question">I love you, will you be mine for the rest of my life?</h1>
+      <div id="buttons">
+        <button id="btn-yes">Yes, I love you too 💖</button>
+        <button id="btn-no">No, I am sorry I can't 💔</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Celebration overlay text -->
+  <div id="celebration-text" class="hidden">
+    <h1 class="celebration-title">You said YES! 🥰</h1>
+    <p class="celebration-sub">Aviral ❤️ Manasvi 💕</p>
+    <div class="floating-emojis">
+      <span>💋</span><span>🌹</span><span>💘</span><span>💝</span><span>😘</span>
+      <span>❤️</span><span>💐</span><span>🥂</span><span>💗</span><span>🦋</span>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

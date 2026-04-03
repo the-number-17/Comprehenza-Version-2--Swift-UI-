@@ -1,0 +1,452 @@
+/* ============================================
+   CSS Variables & Reset
+   ============================================ */
+:root {
+  /* Detective / Tense Theme */
+  --bg-dark: #0a0a0f;
+  --bg-card: rgba(15, 15, 25, 0.85);
+  --text-primary: #e0dcd0;
+  --text-muted: #8a8680;
+  --accent-gold: #c9a84c;
+  --accent-red: #ff2d2d;
+  --border-subtle: rgba(201, 168, 76, 0.25);
+
+  /* Valentine Theme */
+  --bg-love: #1a0a14;
+  --pink-soft: #ff6b9d;
+  --pink-hot: #ff1e6c;
+  --pink-light: #ffb6c1;
+  --rose-gold: #b76e79;
+  --love-white: #fff0f5;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background: var(--bg-dark);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 1.2s ease;
+}
+
+/* ============================================
+   Background Canvas
+   ============================================ */
+#bg-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+#celebration-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+#celebration-canvas.active {
+  opacity: 1;
+}
+
+/* ============================================
+   Red Flash Overlay (wrong answer)
+   ============================================ */
+#red-flash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0;
+  box-shadow: inset 0 0 120px 40px rgba(255, 0, 0, 0.6);
+  transition: opacity 0.15s ease;
+}
+
+#red-flash.flash {
+  opacity: 1;
+}
+
+/* ============================================
+   Main Container & Card
+   ============================================ */
+#main-container {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  perspective: 1000px;
+}
+
+#card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 24px;
+  padding: 48px 56px;
+  max-width: 580px;
+  width: 90%;
+  text-align: center;
+  box-shadow:
+    0 0 60px rgba(201, 168, 76, 0.08),
+    0 20px 60px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(20px);
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+  transform-origin: center center;
+}
+
+#card.love-card {
+  background: rgba(255, 107, 157, 0.12);
+  border-color: rgba(255, 107, 157, 0.3);
+  box-shadow:
+    0 0 80px rgba(255, 107, 157, 0.15),
+    0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   Shake Animation
+   ============================================ */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10% { transform: translateX(-12px) rotate(-1deg); }
+  20% { transform: translateX(12px) rotate(1deg); }
+  30% { transform: translateX(-10px) rotate(-0.5deg); }
+  40% { transform: translateX(10px) rotate(0.5deg); }
+  50% { transform: translateX(-8px); }
+  60% { transform: translateX(8px); }
+  70% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+  90% { transform: translateX(-2px); }
+}
+
+#card.shake {
+  animation: shake 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* ============================================
+   Icon Area
+   ============================================ */
+#icon-area {
+  font-size: 48px;
+  margin-bottom: 24px;
+  line-height: 1;
+}
+
+#icon-area span {
+  transition: all 0.5s ease;
+}
+
+#icon-area .hidden {
+  display: none;
+}
+
+@keyframes pulse-icon {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+#detective-icon {
+  animation: pulse-icon 2s ease-in-out infinite;
+  display: inline-block;
+}
+
+#love-icon {
+  animation: pulse-icon 1s ease-in-out infinite;
+  display: inline-block;
+}
+
+/* ============================================
+   Question Text
+   ============================================ */
+h1#question {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 1.75rem;
+  line-height: 1.4;
+  color: var(--text-primary);
+  margin-bottom: 40px;
+  transition: all 0.5s ease;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.love-mode h1#question,
+h1#question.love-text {
+  color: var(--love-white);
+  text-shadow: 0 0 30px rgba(255, 107, 157, 0.4);
+}
+
+/* ============================================
+   Buttons
+   ============================================ */
+#buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+button {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 16px 36px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  max-width: 360px;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.3px;
+}
+
+button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  transform: translate(-50%, -50%);
+  transition: width 0.5s, height 0.5s;
+}
+
+button:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* Yes Button */
+#btn-yes {
+  background: linear-gradient(135deg, #c9a84c 0%, #e6c96e 50%, #c9a84c 100%);
+  color: #1a1a0f;
+  box-shadow: 0 4px 20px rgba(201, 168, 76, 0.3);
+}
+
+#btn-yes:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 8px 35px rgba(201, 168, 76, 0.5);
+}
+
+#btn-yes.love-btn {
+  background: linear-gradient(135deg, #ff1e6c 0%, #ff6b9d 50%, #ff1e6c 100%);
+  color: #fff;
+  box-shadow: 0 4px 25px rgba(255, 30, 108, 0.4);
+  animation: btn-glow 2s ease-in-out infinite;
+}
+
+@keyframes btn-glow {
+  0%, 100% { box-shadow: 0 4px 25px rgba(255, 30, 108, 0.4); }
+  50% { box-shadow: 0 4px 40px rgba(255, 30, 108, 0.7); }
+}
+
+#btn-yes.love-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 45px rgba(255, 30, 108, 0.6);
+}
+
+/* No Button */
+#btn-no {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid rgba(138, 134, 128, 0.3);
+}
+
+#btn-no:hover {
+  background: rgba(255, 45, 45, 0.08);
+  border-color: rgba(255, 45, 45, 0.3);
+  color: var(--accent-red);
+  transform: translateY(-2px);
+}
+
+/* Shrinking No button */
+#btn-no.shrinking {
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Growing Yes button */
+#btn-yes.growing {
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* ============================================
+   Celebration Overlay
+   ============================================ */
+#celebration-text {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+#celebration-text.visible {
+  opacity: 1;
+}
+
+#celebration-text.hidden {
+  display: none;
+}
+
+.celebration-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 4.5rem;
+  color: var(--love-white);
+  text-shadow:
+    0 0 40px rgba(255, 107, 157, 0.6),
+    0 0 80px rgba(255, 30, 108, 0.3);
+  animation: celebration-pop 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) both;
+  margin-bottom: 16px;
+}
+
+.celebration-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.25rem;
+  color: var(--pink-light);
+  opacity: 0;
+  animation: fade-up 1s ease 0.5s forwards;
+  letter-spacing: 0.5px;
+}
+
+@keyframes celebration-pop {
+  0% { transform: scale(0.3); opacity: 0; }
+  70% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fade-up {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ============================================
+   Floating Emojis
+   ============================================ */
+.floating-emojis {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 7;
+}
+
+.floating-emojis span {
+  position: absolute;
+  font-size: 2rem;
+  opacity: 0;
+}
+
+#celebration-text.visible .floating-emojis span {
+  animation: float-emoji 4s ease-in-out infinite;
+}
+
+#celebration-text.visible .floating-emojis span:nth-child(1) { left: 5%; animation-delay: 0s; font-size: 2.5rem; }
+#celebration-text.visible .floating-emojis span:nth-child(2) { left: 15%; animation-delay: 0.4s; font-size: 1.8rem; }
+#celebration-text.visible .floating-emojis span:nth-child(3) { left: 25%; animation-delay: 0.8s; font-size: 2.2rem; }
+#celebration-text.visible .floating-emojis span:nth-child(4) { left: 35%; animation-delay: 1.2s; font-size: 1.6rem; }
+#celebration-text.visible .floating-emojis span:nth-child(5) { left: 48%; animation-delay: 0.2s; font-size: 2rem; }
+#celebration-text.visible .floating-emojis span:nth-child(6) { left: 58%; animation-delay: 0.6s; font-size: 2.8rem; }
+#celebration-text.visible .floating-emojis span:nth-child(7) { left: 68%; animation-delay: 1s; font-size: 1.5rem; }
+#celebration-text.visible .floating-emojis span:nth-child(8) { left: 78%; animation-delay: 1.4s; font-size: 2rem; }
+#celebration-text.visible .floating-emojis span:nth-child(9) { left: 85%; animation-delay: 0.3s; font-size: 2.3rem; }
+#celebration-text.visible .floating-emojis span:nth-child(10) { left: 93%; animation-delay: 0.9s; font-size: 1.7rem; }
+
+@keyframes float-emoji {
+  0% {
+    bottom: -10%;
+    opacity: 0;
+    transform: rotate(0deg) scale(0.5);
+  }
+  10% {
+    opacity: 1;
+    transform: rotate(15deg) scale(1);
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    bottom: 110%;
+    opacity: 0;
+    transform: rotate(-15deg) scale(0.8);
+  }
+}
+
+/* ============================================
+   Valentine Background (body class)
+   ============================================ */
+body.valentine {
+  background: radial-gradient(ellipse at 30% 50%, #2a0a1a 0%, #1a0510 40%, #0f020a 100%);
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 600px) {
+  #card {
+    padding: 36px 28px;
+    border-radius: 20px;
+  }
+
+  h1#question {
+    font-size: 1.35rem;
+    min-height: 60px;
+  }
+
+  .celebration-title {
+    font-size: 3rem;
+  }
+
+  .celebration-sub {
+    font-size: 1rem;
+    padding: 0 20px;
+  }
+
+  button {
+    font-size: 0.9rem;
+    padding: 14px 28px;
+  }
+}
