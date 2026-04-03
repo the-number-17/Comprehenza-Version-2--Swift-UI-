@@ -46,11 +46,7 @@ struct ArticleRowView: View {
         }
         
         // Truncate if still too long
-        if cleaned.count > 20 {
-            cleaned = String(cleaned.prefix(18)) + "…"
-        }
-        
-        return cleaned
+        return cleaned // No truncation as per user request
     }
     
     var body: some View {
@@ -60,8 +56,7 @@ struct ArticleRowView: View {
                 Text(displayTitle)
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundColor(.laymanDark)
-                    .lineLimit(3)
-                    .truncationMode(.tail)
+                    .lineLimit(nil) // Zero truncation
                     .multilineTextAlignment(.leading)
                 
                 HStack(spacing: 6) {
@@ -69,7 +64,7 @@ struct ArticleRowView: View {
                         Text(source)
                             .font(.system(size: 12, weight: .medium))
                             .foregroundColor(.laymanOrange)
-                            .lineLimit(1)
+                            .lineLimit(nil)
                     }
                     
                     if cleanSourceName != nil && article.publishedAt != nil {
@@ -82,7 +77,7 @@ struct ArticleRowView: View {
                         Text(formatDate(date))
                             .font(LaymanFont.caption(12))
                             .foregroundColor(.laymanGray)
-                            .lineLimit(1)
+                            .lineLimit(nil)
                     }
                     
                     Spacer(minLength: 0)

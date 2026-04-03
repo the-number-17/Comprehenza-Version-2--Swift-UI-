@@ -92,9 +92,11 @@ final class ArticlesViewModel: ObservableObject {
                 }
             }
             
-            // 3. Expand Full Story (if missing or truncated)
+            // 3. Expand Full Story (always reconstruct from snippet)
             let currentContent = allArticles[index].content ?? ""
-            if allArticles[index].expandedContent == nil && (currentContent.count < 1000 || currentContent.contains("PAID PLANS")) {
+            let needsExpansion = allArticles[index].expandedContent == nil &&
+                (currentContent.count < 1500 || currentContent.contains("PAID PLANS") || currentContent.contains("[...]") || currentContent.contains("..."))
+            if needsExpansion {
                 let expandedContent = try await aiService.expandFullStory(
                     title: article.title,
                     description: article.description ?? "",

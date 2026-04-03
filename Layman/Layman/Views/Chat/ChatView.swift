@@ -238,7 +238,7 @@ struct SuggestionChipsView: View {
                 .padding(.horizontal, LaymanDimension.screenPadding)
             
             VStack(spacing: 8) {
-                ForEach(suggestions, id: \.self) { suggestion in
+                ForEach(Array(suggestions.enumerated()), id: \.offset) { index, suggestion in
                     Button {
                         onSelect(suggestion)
                     } label: {

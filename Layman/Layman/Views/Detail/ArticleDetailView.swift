@@ -5,35 +5,15 @@ struct ArticleDetailView: View {
     let article: Article
     @EnvironmentObject var articlesViewModel: ArticlesViewModel
     @Environment(\.dismiss) private var dismiss
-    @State private var showSimpleSummary = false
     @State private var showChat = false
     @State private var showSafari = false
     @State private var showShareSheet = false
     @State private var isSaved: Bool
+    @State private var currentCardIndex = 0
     
     private var displayTitle: String {
         let title = article.laymanTitle.trimmingCharacters(in: .whitespacesAndNewlines)
         return title.isEmpty ? article.title : title
-    }
-    
-    private var cleanSourceName: String? {
-        guard let source = article.sourceName, !source.isEmpty else { return nil }
-        var cleaned = source
-        if cleaned.lowercased().hasPrefix("http") {
-            if let url = URL(string: cleaned), let host = url.host {
-                cleaned = host
-            } else {
-                cleaned = cleaned.replacingOccurrences(of: "https://", with: "", options: .caseInsensitive)
-                    .replacingOccurrences(of: "http://", with: "", options: .caseInsensitive)
-                if let i = cleaned.firstIndex(of: "/") { cleaned = String(cleaned[..<i]) }
-            }
-        }
-        if cleaned.lowercased().hasPrefix("www.") { cleaned = String(cleaned.dropFirst(4)) }
-        if cleaned.contains("."), let i = cleaned.firstIndex(of: ".") {
-            let name = String(cleaned[..<i])
-            cleaned = name.prefix(1).uppercased() + name.dropFirst()
-        }
-        return cleaned.count > 20 ? String(cleaned.prefix(18)) + "…" : cleaned
     }
     
     init(article: Article) {
@@ -45,285 +25,188 @@ struct ArticleDetailView: View {
         ZStack {
             Color.laymanCream.ignoresSafeArea()
             
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(alignment: .leading, spacing: 24) {
-                    
-                    // 1. Source and date
-                    HStack(spacing: 8) {
-                        if let source = cleanSourceName {
-                            Text(source.uppercased())
-                                .font(LaymanFont.small(11))
-                                .foregroundColor(.white)
-                                .tracking(0.5)
-                                .padding(.horizontal, 10)
-                                .padding(.vertical, 5)
-                                .background(Color.laymanOrange)
-                                .cornerRadius(6)
-                        }
+            VStack(spacing: 0) {
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(alignment: .leading, spacing: 16) {
                         
-                        if let date = article.publishedAt {
-                            Text(formatDate(date))
-                                .font(LaymanFont.caption(12))
-                                .foregroundColor(.laymanGray)
-                        }
+                        // 1. HEADLINE
+                        Text(displayTitle)
+                            .font(.system(size: 26, weight: .bold))
+                            .foregroundColor(.laymanDark)
+                            .multilineTextAlignment(.leading)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .padding(.horizontal, 20)
+                            .padding(.top, 8)
                         
-                        Spacer()
-                    }
-                    .padding(.horizontal, LaymanDimension.screenPadding)
-                    .padding(.top, 16)
-                    
-                    // 2. Headline
-                    Text(displayTitle)
-                        .font(.system(size: 26, weight: .bold))
-                        .foregroundColor(.laymanDark)
-                        .multilineTextAlignment(.leading)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding(.horizontal, LaymanDimension.screenPadding)
-                    
-                    // 3. Photo Card
-                    if let imageURL = article.imageURL, let url = URL(string: imageURL) {
-                        AsyncImage(url: url) { phase in
-                            switch phase {
-                            case .success(let image):
-                                image
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(maxWidth: .infinity)
-                                    .frame(height: 240)
-                                    .clipped()
-                                    .cornerRadius(LaymanDimension.cornerRadius)
-                            default:
-                                imagePlaceholder
-                            }
-                        }
-                        .padding(.horizontal, LaymanDimension.screenPadding)
-                    }
-                    
-                    // 4. Simple Version Card (Interactive)
-                    if !article.laymanCards.isEmpty {
-                        VStack(alignment: .leading, spacing: 14) {
-                            HStack(spacing: 8) {
-                                Image(systemName: "sparkles")
-                                    .font(.system(size: 14, weight: .semibold))
-                                    .foregroundColor(.laymanOrange)
-                                
-                                Text("THE SIMPLE VERSION")
-                                    .font(LaymanFont.small(11))
-                                    .tracking(1.0)
-                                    .foregroundColor(.laymanGray)
-                                
-                                Spacer()
-                            }
-                            .padding(.horizontal, LaymanDimension.screenPadding + 4)
+                        // 2. IMAGE — always same size container
+                        ZStack {
+                            // Placeholder always present
+                            RoundedRectangle(cornerRadius: 20)
+                                .fill(Color.laymanBeige)
+                                .frame(height: 220)
+                                .overlay(
+                                    Image(systemName: "newspaper.fill")
+                                        .font(.system(size: 40))
+                                        .foregroundColor(.laymanPeach)
+                                )
                             
-                            Button {
-                                showSimpleSummary = true
-                            } label: {
-                                VStack(alignment: .leading, spacing: 14) {
-                                    Text(article.laymanCards.first ?? "")
-                                        .font(.system(size: 17, weight: .regular))
-                                        .foregroundColor(.laymanDark)
-                                        .lineSpacing(6)
-                                        .multilineTextAlignment(.leading)
-                                        .fixedSize(horizontal: false, vertical: true) // Ensure it shows fully
-                                    
-                                    HStack {
-                                        Text("Tap for full summary")
-                                            .font(LaymanFont.small(12))
-                                            .foregroundColor(.laymanGray)
-                                        Spacer()
-                                        Image(systemName: "arrow.up.right.circle.fill")
-                                            .font(.system(size: 20))
-                                            .foregroundColor(.laymanOrange)
+                            // Real image loads on top
+                            if let imageURL = article.imageURL, let url = URL(string: imageURL) {
+                                AsyncImage(url: url) { phase in
+                                    if case .success(let image) = phase {
+                                        image
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(height: 220)
+                                            .clipped()
                                     }
-                                    .padding(.top, 4)
+                                }
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 220)
+                        .cornerRadius(20)
+                        .padding(.horizontal, 20)
+                        
+                        // 3. CONTENT CARDS — always same size frame
+                        VStack(spacing: 10) {
+                            if article.laymanCards.isEmpty {
+                                // Skeleton fills the same space
+                                VStack(alignment: .leading, spacing: 12) {
+                                    SkeletonLine()
+                                    SkeletonLine()
+                                    SkeletonLine(width: 220)
+                                    SkeletonLine()
+                                    SkeletonLine(width: 180)
+                                    SkeletonLine()
                                 }
                                 .padding(20)
                                 .frame(maxWidth: .infinity, alignment: .leading)
+                                .frame(height: 220)
                                 .background(Color.laymanCardBg)
-                                .cornerRadius(LaymanDimension.cornerRadius)
-                                .shadow(color: .black.opacity(0.05), radius: 10, x: 0, y: 4)
-                                .padding(.horizontal, LaymanDimension.screenPadding)
-                            }
-                            .buttonStyle(PlainButtonStyle())
-                        }
-                    }
-                    
-                    // 5. Full News Section — Now in a matching Card orientation
-                    VStack(alignment: .leading, spacing: 14) {
-                        HStack(spacing: 8) {
-                            Image(systemName: "doc.text.fill")
-                                .font(.system(size: 14))
-                                .foregroundColor(.laymanOrange)
-                            
-                            Text("FULL STORY")
-                                .font(LaymanFont.small(11))
-                                .tracking(1.0)
-                                .foregroundColor(.laymanGray)
-                            
-                            Spacer()
-                        }
-                        .padding(.horizontal, LaymanDimension.screenPadding + 4)
-                        
-                        VStack(alignment: .leading, spacing: 16) {
-                            if articlesViewModel.isEnhancingWithAI && (article.expandedContent?.isEmpty ?? true) {
-                                HStack(spacing: 12) {
-                                    ProgressView().tint(.laymanOrange)
-                                    Text("Expanding story with AI...").font(LaymanFont.small(12)).foregroundColor(.laymanGray)
-                                }
-                                .padding(.vertical, 8)
-                            }
-                            
-                            let displayContent = article.expandedContent ?? article.content ?? article.description ?? ""
-                            let cleanedContent = displayContent
-                                .replacingOccurrences(of: "ONLY AVAILABLE IN PAID PLANS", with: "")
-                                .replacingOccurrences(of: "[...]", with: "")
-                            
-                            if !cleanedContent.isEmpty {
-                                Text(cleanedContent)
-                                    .font(.system(size: 17))
-                                    .foregroundColor(.laymanDark.opacity(0.9))
-                                    .lineSpacing(7)
-                                    .multilineTextAlignment(.leading)
-                                    .fixedSize(horizontal: false, vertical: true) // No Truncation
+                                .cornerRadius(20)
+                                .shadow(color: .black.opacity(0.04), radius: 8, x: 0, y: 3)
+                                .padding(.horizontal, 20)
                             } else {
-                                Text("Building your story. Please check back in a moment or view the source link below.")
-                                    .font(LaymanFont.body(15))
-                                    .foregroundColor(.laymanGray)
-                                    .italic()
+                                TabView(selection: $currentCardIndex) {
+                                    ForEach(Array(article.laymanCards.enumerated()), id: \.offset) { index, card in
+                                        ScrollView(.vertical, showsIndicators: false) {
+                                            Text(card)
+                                                .font(.system(size: 18))
+                                                .foregroundColor(.laymanDark)
+                                                .lineSpacing(7)
+                                                .multilineTextAlignment(.leading)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                        }
+                                        .padding(20)
+                                        .frame(maxWidth: .infinity)
+                                        .frame(height: 220)
+                                        .background(Color.laymanCardBg)
+                                        .cornerRadius(20)
+                                        .shadow(color: .black.opacity(0.04), radius: 8, x: 0, y: 3)
+                                        .padding(.horizontal, 20)
+                                        .tag(index)
+                                    }
+                                }
+                                .tabViewStyle(.page(indexDisplayMode: .never))
+                                .frame(height: 240)
+                            }
+                            
+                            // Page dots — always visible
+                            HStack(spacing: 8) {
+                                ForEach(0..<3, id: \.self) { i in
+                                    Capsule()
+                                        .fill(i == currentCardIndex && !article.laymanCards.isEmpty ? Color.laymanOrange : Color.laymanLightGray.opacity(0.4))
+                                        .frame(width: i == currentCardIndex && !article.laymanCards.isEmpty ? 20 : 7, height: 7)
+                                        .animation(.easeInOut(duration: 0.25), value: currentCardIndex)
+                                }
                             }
                         }
-                        .padding(20)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.laymanCardBg)
-                        .cornerRadius(LaymanDimension.cornerRadius)
-                        .shadow(color: .black.opacity(0.05), radius: 10, x: 0, y: 4)
-                        .padding(.horizontal, LaymanDimension.screenPadding)
                     }
-                    
-                    Spacer().frame(height: 100)
+                    .padding(.bottom, 20)
                 }
-            }
-            
-            // Ask Layman button
-            VStack {
-                Spacer()
+                
+                // 4. ASK LAYMAN — solid orange button
                 Button { showChat = true } label: {
-                    HStack(spacing: 12) {
-                        ZStack {
-                            Circle().fill(LinearGradient(colors: [.laymanPeach, .laymanOrange], startPoint: .topLeading, endPoint: .bottomTrailing)).frame(width: 36, height: 36)
-                            Image(systemName: "bubble.left.fill").font(.system(size: 14)).foregroundColor(.white)
-                        }
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Ask Layman").font(LaymanFont.headline(16)).foregroundColor(.laymanDark)
-                            Text("Get a simple explanation").font(LaymanFont.small(11)).foregroundColor(.laymanGray)
-                        }
-                        Spacer()
-                        Image(systemName: "chevron.right").font(.system(size: 14, weight: .semibold)).foregroundColor(.laymanOrange)
+                    HStack(spacing: 8) {
+                        Image(systemName: "sparkles")
+                            .font(.system(size: 16, weight: .semibold))
+                        Text("Ask Layman")
+                            .font(.system(size: 18, weight: .bold))
                     }
-                    .padding(.horizontal, 16).padding(.vertical, 14).background(Color.laymanCardBg).cornerRadius(LaymanDimension.cornerRadius).shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: -2)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(
+                        LinearGradient(colors: [Color.laymanOrange, Color.laymanOrange.opacity(0.85)], startPoint: .leading, endPoint: .trailing)
+                    )
+                    .cornerRadius(16)
                 }
-                .padding(.horizontal, LaymanDimension.screenPadding).padding(.bottom, 12)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 10)
             }
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {
+            // Back button — left
             ToolbarItem(placement: .navigationBarLeading) { BackButton() }
+            // Link, Bookmark, Share — right (in that order)
             ToolbarItemGroup(placement: .navigationBarTrailing) {
                 Button { showSafari = true } label: { toolbarIcon("link") }
-                Button { Task { isSaved.toggle(); await articlesViewModel.toggleSave(article) } } label: { toolbarIcon(isSaved ? "bookmark.fill" : "bookmark", color: isSaved ? .laymanOrange : .laymanDark) }
+                Button {
+                    Task { isSaved.toggle(); await articlesViewModel.toggleSave(article) }
+                } label: {
+                    toolbarIcon(isSaved ? "bookmark.fill" : "bookmark", color: isSaved ? .laymanOrange : .laymanDark)
+                }
                 Button { showShareSheet = true } label: { toolbarIcon("square.and.arrow.up") }
             }
         }
-        .sheet(isPresented: $showSimpleSummary) { SimpleSummarySheet(article: article) }
-        .sheet(isPresented: $showChat) { ChatView(article: article, articlesViewModel: articlesViewModel) }
-        .sheet(isPresented: $showSafari) { if let s = article.sourceURL, let u = URL(string: s) { SafariView(url: u).ignoresSafeArea() } }
-        .sheet(isPresented: $showShareSheet) { if let s = article.sourceURL, let u = URL(string: s) { ShareSheet(items: [u]) } }
+        .sheet(isPresented: $showChat) {
+            ChatView(article: article, articlesViewModel: articlesViewModel)
+        }
+        .sheet(isPresented: $showSafari) {
+            // In-app popup — does NOT navigate away from the app
+            if let s = article.sourceURL, let u = URL(string: s) {
+                SafariView(url: u).ignoresSafeArea()
+            }
+        }
+        .sheet(isPresented: $showShareSheet) {
+            if let s = article.sourceURL, let u = URL(string: s) {
+                ShareSheet(items: [u])
+            }
+        }
+        .onAppear {
+            Task {
+                await articlesViewModel.enrichArticleWithAI(article)
+            }
+        }
     }
     
+    // MARK: - Helpers
+    
     private func toolbarIcon(_ name: String, color: Color = .laymanDark) -> some View {
-        Image(systemName: name).font(.system(size: 14, weight: .medium)).foregroundColor(color).frame(width: 34, height: 34).background(Color.laymanBeige.opacity(0.8)).clipShape(Circle())
+        Image(systemName: name)
+            .font(.system(size: 14, weight: .medium))
+            .foregroundColor(color)
+            .frame(width: 34, height: 34)
+            .background(Color.laymanBeige.opacity(0.8))
+            .clipShape(Circle())
     }
     
     private var imagePlaceholder: some View {
         ZStack {
             LinearGradient(colors: [Color.laymanBeige, Color.laymanPeach.opacity(0.2)], startPoint: .topLeading, endPoint: .bottomTrailing)
-            Image(systemName: "newspaper.fill").font(.system(size: 40)).foregroundColor(.laymanPeach)
-        }.frame(maxWidth: .infinity).frame(height: 240).cornerRadius(LaymanDimension.cornerRadius)
-    }
-    
-    private func formatDate(_ dateString: String) -> String {
-        let formatter = DateFormatter()
-        let formats = ["yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss'Z'", "yyyy-MM-dd"]
-        for format in formats {
-            formatter.dateFormat = format
-            if let date = formatter.date(from: dateString) {
-                let d = DateFormatter()
-                d.dateFormat = "MMM d, yyyy"
-                return d.string(from: date)
-            }
+            Image(systemName: "newspaper.fill")
+                .font(.system(size: 40))
+                .foregroundColor(.laymanPeach)
         }
-        return ""
+        .frame(maxWidth: .infinity)
+        .frame(height: 220)
+        .cornerRadius(16)
     }
 }
 
-// MARK: - Simple Summary Sheet
-struct SimpleSummarySheet: View {
-    let article: Article
-    @Environment(\.dismiss) private var dismiss
-    
-    var body: some View {
-        ZStack {
-            Color.laymanCream.ignoresSafeArea()
-            
-            VStack(spacing: 0) {
-                HStack {
-                    Text("Simple Summary").font(LaymanFont.logo(20)).foregroundColor(.laymanDark)
-                    Spacer()
-                    Button { dismiss() } label: { Image(systemName: "xmark.circle.fill").font(.system(size: 24)).foregroundColor(.laymanGray.opacity(0.5)) }
-                }
-                .padding(24)
-                
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 24) {
-                        Text(article.laymanTitle.isEmpty ? article.title : article.laymanTitle)
-                            .font(.system(size: 24, weight: .bold))
-                            .foregroundColor(.laymanDark)
-                            .lineLimit(nil)
-                            .fixedSize(horizontal: false, vertical: true)
-                        
-                        VStack(alignment: .leading, spacing: 20) {
-                            ForEach(article.laymanCards, id: \.self) { p in
-                                Text(p)
-                                    .font(.system(size: 17))
-                                    .foregroundColor(.laymanDark)
-                                    .lineSpacing(6)
-                                    .lineLimit(nil)
-                                    .fixedSize(horizontal: false, vertical: true)
-                            }
-                        }
-                        Spacer(minLength: 60) // Extra bottom breathing room
-                    }
-                    .padding(.horizontal, 24)
-                }
-            }
-        }
-        .presentationDetents([.large])
-        .presentationDragIndicator(.visible)
-    }
-}
-
-struct ContentCardView: View {
-    let text: String
-    let cardNumber: Int
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(text).font(.system(size: 16)).foregroundColor(.laymanDark).lineSpacing(5).lineLimit(7).multilineTextAlignment(.leading)
-            Spacer(minLength: 0)
-        }
-        .padding(LaymanDimension.cardPadding).frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading).background(Color.laymanCardBg).cornerRadius(LaymanDimension.cornerRadius).shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2).padding(.horizontal, LaymanDimension.screenPadding)
-    }
-}
+// MARK: - Utility Views
 
 struct SafariView: UIViewControllerRepresentable {
     let url: URL
@@ -337,6 +220,8 @@ struct SafariView: UIViewControllerRepresentable {
 
 struct ShareSheet: UIViewControllerRepresentable {
     let items: [Any]
-    func makeUIViewController(context: Context) -> UIActivityViewController { UIActivityViewController(activityItems: items, applicationActivities: nil) }
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: items, applicationActivities: nil)
+    }
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }

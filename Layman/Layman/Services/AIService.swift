@@ -11,7 +11,7 @@ final class AIService {
     private let geminiBaseURL = "https://generativelanguage.googleapis.com/v1beta/models"
     
     // Fallback - OpenRouter (Free Models)
-    private let openRouterModel = "google/gemma-2-9b-it:free" // Reliable free model
+    private let openRouterModel = "qwen/qwen3.6-plus:free" // More reliable free model
     private let openRouterBaseURL = "https://openrouter.ai/api/v1/chat/completions"
     
     // Rate limiting
@@ -39,24 +39,101 @@ final class AIService {
     func generateSuggestions(for articleTitle: String, articleContent: String) async throws -> [String] {
         let prompt = "Generate exactly 3 simple questions about this: \(articleTitle). \(articleContent). Return ONLY the questions, one per line."
         let response = try await makeRequest(systemPrompt: "Simple question generator.", userMessage: prompt)
-        return response.components(separatedBy: "\n").filter { !$0.isEmpty }.prefix(3).map { String($0) }
+        let questions = response.components(separatedBy: "\n")
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+            .prefix(6) // Get a few more to filter duplicates
+        
+        // Ensure uniqueness for SwiftUI ForEach
+        var uniqueQuestions: [String] = []
+        for question in questions {
+            if !uniqueQuestions.contains(question) && !question.isEmpty {
+                uniqueQuestions.append(question)
+            }
+        }
+        
+        return Array(uniqueQuestions.prefix(3))
     }
     
     func simplifyHeadline(_ headline: String) async throws -> String {
-        let prompt = "Rewrite simply: \(headline). No dots at the end."
+        let prompt = "Rewrite simply: \(headline). No dots at the end. NEVER use [...] or truncate."
         return try await makeRequest(systemPrompt: "Headline simplifier.", userMessage: prompt)
     }
     
     func expandFullStory(title: String, description: String, partialContent: String?) async throws -> String {
         let content = partialContent ?? description
-        let prompt = "Write a detailed (300+ words) version of this story in simple language: \(title). Content: \(content). No dots at the end."
-        return try await makeRequest(systemPrompt: "Detailed story writer.", userMessage: prompt)
+        let systemPrompt = "You are a professional journalist. Write a complete, well-structured news article. Use 4-5 paragraphs. Write in simple, clear language. NEVER use [...], '(read more)', ellipsis, or any truncation. Every sentence must be complete."
+        let prompt = "Write a full news article based on this headline and snippet. Headline: \(title). Snippet: \(content)"
+        let response = try await makeRequest(systemPrompt: systemPrompt, userMessage: prompt)
+        return cleanAIOutput(response)
     }
     
     func generateContentCards(for articleContent: String) async throws -> [String] {
-        let prompt = "Summarize into 3 short simple paragraphs. Blank line between them. No dots. Content: \(articleContent)"
-        let response = try await makeRequest(systemPrompt: "News summarizer.", userMessage: prompt)
-        return response.components(separatedBy: "\n\n").filter { !$0.isEmpty }.prefix(3).map { String($0) }
+        let prompt = """
+        Summarize this news into exactly 3 separate paragraphs numbered 1, 2, 3.
+        
+        Paragraph 1: What happened — explain the main event in 3 simple sentences.
+        Paragraph 2: Why it matters — explain the impact or significance in 3 simple sentences.
+        Paragraph 3: What's next — explain what could happen next in 3 simple sentences.
+        
+        Write in casual, easy-to-understand language. Separate each paragraph with a blank line.
+        NEVER use [...] or truncate. Every sentence must be complete.
+        
+        Content: \(articleContent)
+        """
+        let response = try await makeRequest(
+            systemPrompt: "News summarizer. Always produce exactly 3 paragraphs. Each paragraph has 3 complete sentences about a different aspect. Never truncate.",
+            userMessage: prompt
+        )
+        
+        // Parse paragraphs
+        var paragraphs = response.components(separatedBy: "\n\n")
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .map { line -> String in
+                // Strip numbering like "1.", "2.", "3." or "1:", "2:", "3:"
+                var cleaned = line
+                if let first = cleaned.first, first.isNumber {
+                    cleaned = String(cleaned.drop(while: { $0.isNumber || $0 == "." || $0 == ":" || $0 == " " }))
+                }
+                return cleanAIOutput(cleaned)
+            }
+            .filter { !$0.isEmpty && $0.count > 20 }
+        
+        // Remove duplicates
+        var unique: [String] = []
+        for p in paragraphs {
+            if !unique.contains(p) {
+                unique.append(p)
+            }
+        }
+        
+        // Guarantee exactly 3 cards
+        if unique.count < 3 {
+            // Generate additional cards
+            let fillPrompt = "Write \(3 - unique.count) more simple paragraph(s) about this news, each with 3 sentences covering aspects not yet mentioned. Content: \(articleContent)"
+            let extra = try await makeRequest(systemPrompt: "News summarizer. Write short paragraphs with 3 sentences each.", userMessage: fillPrompt)
+            let extraParagraphs = extra.components(separatedBy: "\n\n")
+                .map { cleanAIOutput($0.trimmingCharacters(in: .whitespacesAndNewlines)) }
+                .filter { !$0.isEmpty && $0.count > 20 && !unique.contains($0) }
+            unique.append(contentsOf: extraParagraphs)
+        }
+        
+        return Array(unique.prefix(3))
+    }
+    
+    // MARK: - Output Cleanup
+    
+    private func cleanAIOutput(_ text: String) -> String {
+        var cleaned = text
+        let markers = ["[...]", "(...)", "[Read more]", "(read more)", "ONLY AVAILABLE IN PAID PLANS"]
+        for marker in markers {
+            cleaned = cleaned.replacingOccurrences(of: marker, with: "", options: .caseInsensitive)
+        }
+        // Remove trailing ellipsis
+        while cleaned.hasSuffix("...") {
+            cleaned = String(cleaned.dropLast(3)).trimmingCharacters(in: .whitespaces)
+        }
+        return cleaned.trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
     // MARK: - API Orchestration
@@ -92,7 +169,7 @@ final class AIService {
         let body: [String: Any] = [
             "system_instruction": ["parts": [["text": systemPrompt]]],
             "contents": [["parts": [["text": userMessage]]]],
-            "generationConfig": ["temperature": 0.7, "maxOutputTokens": 1024]
+            "generationConfig": ["temperature": 0.7, "maxOutputTokens": 2048]
         ]
         
         var request = URLRequest(url: url)

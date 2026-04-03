@@ -60,7 +60,7 @@ struct FeaturedCardView: View {
             let name = String(cleaned[..<i])
             cleaned = name.prefix(1).uppercased() + name.dropFirst()
         }
-        return cleaned.count > 20 ? String(cleaned.prefix(18)) + "…" : cleaned
+        return cleaned // No truncation as per user request
     }
     
     var body: some View {
@@ -95,10 +95,12 @@ struct FeaturedCardView: View {
                 
                 // Gradient overlay for text readability
                 LinearGradient(
-                    colors: [.clear, .black.opacity(0.15), .black.opacity(0.8)],
+                    colors: [.clear, .black.opacity(0.3), .black.opacity(0.9)],
                     startPoint: .top,
                     endPoint: .bottom
                 )
+                .frame(height: geo.size.height * 0.7)
+                .offset(y: geo.size.height * 0.3)
                 
                 // Headline — pinned to bottom, properly constrained
                 VStack(alignment: .leading, spacing: 8) {
@@ -116,8 +118,7 @@ struct FeaturedCardView: View {
                     Text(displayTitle)
                         .font(.system(size: 17, weight: .semibold))
                         .foregroundColor(.white)
-                        .lineLimit(2)
-                        .truncationMode(.tail)
+                        .lineLimit(nil) // Zero truncation
                         .multilineTextAlignment(.leading)
                 }
                 .padding(16)
