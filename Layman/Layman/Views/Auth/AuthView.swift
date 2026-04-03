@@ -4,11 +4,14 @@ struct AuthView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
     @State private var email = ""
     @State private var password = ""
+    @State private var name = ""
+    @State private var age = ""
+    @State private var phone = ""
     @State private var isSignUp = true
     @FocusState private var focusedField: Field?
     
     enum Field {
-        case email, password
+        case email, password, name, age, phone
     }
     
     var body: some View {
@@ -61,6 +64,57 @@ struct AuthView: View {
                         .background(Color.laymanBeige)
                         .cornerRadius(12)
                         .padding(.horizontal, 4)
+                        
+                        if isSignUp {
+                            // Name field
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Full Name")
+                                    .font(LaymanFont.caption(13))
+                                    .foregroundColor(.laymanGray)
+                                
+                                TextField("Your Name", text: $name)
+                                    .font(LaymanFont.body())
+                                    .textContentType(.name)
+                                    .focused($focusedField, equals: .name)
+                                    .padding(14)
+                                    .background(Color.laymanBeige.opacity(0.5))
+                                    .cornerRadius(12)
+                            }
+                            
+                            HStack(spacing: 16) {
+                                // Age field
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text("Age")
+                                        .font(LaymanFont.caption(13))
+                                        .foregroundColor(.laymanGray)
+                                    
+                                    TextField("Age", text: $age)
+                                        .font(LaymanFont.body())
+                                        .keyboardType(.numberPad)
+                                        .focused($focusedField, equals: .age)
+                                        .padding(14)
+                                        .background(Color.laymanBeige.opacity(0.5))
+                                        .cornerRadius(12)
+                                }
+                                .frame(width: 80)
+                                
+                                // Phone field
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text("Phone Number")
+                                        .font(LaymanFont.caption(13))
+                                        .foregroundColor(.laymanGray)
+                                    
+                                    TextField("Optional", text: $phone)
+                                        .font(LaymanFont.body())
+                                        .keyboardType(.phonePad)
+                                        .textContentType(.telephoneNumber)
+                                        .focused($focusedField, equals: .phone)
+                                        .padding(14)
+                                        .background(Color.laymanBeige.opacity(0.5))
+                                        .cornerRadius(12)
+                                }
+                            }
+                        }
                         
                         // Email field
                         VStack(alignment: .leading, spacing: 8) {
@@ -119,7 +173,13 @@ struct AuthView: View {
                             focusedField = nil
                             Task {
                                 if isSignUp {
-                                    await authViewModel.signUp(email: email, password: password)
+                                    await authViewModel.signUp(
+                                        email: email,
+                                        password: password,
+                                        name: name,
+                                        age: age,
+                                        phone: phone
+                                    )
                                     // If confirmation shown, auto-switch to login
                                     if authViewModel.showEmailConfirmation {
                                         withAnimation(.easeInOut(duration: 0.4)) {

@@ -29,7 +29,12 @@ final class NewsService {
             throw NewsError.invalidURL
         }
         
-        let (data, response) = try await URLSession.shared.data(from: url)
+        let configuration = URLSessionConfiguration.default
+        configuration.timeoutIntervalForRequest = 60
+        configuration.timeoutIntervalForResource = 60
+        let session = URLSession(configuration: configuration)
+        
+        let (data, response) = try await session.data(from: url)
         
         guard let httpResponse = response as? HTTPURLResponse,
               httpResponse.statusCode == 200 else {
@@ -96,18 +101,6 @@ final class NewsService {
                 of: formal, with: casual,
                 options: .caseInsensitive
             )
-        }
-        
-        // Truncate to roughly 65-72 characters to keep it readable
-        if simplified.count > 72 {
-            let words = simplified.split(separator: " ")
-            var result = ""
-            for word in words {
-                let candidate = result.isEmpty ? String(word) : result + " " + word
-                if candidate.count > 68 { break }
-                result = candidate
-            }
-            simplified = result + "…"
         }
         
         return simplified

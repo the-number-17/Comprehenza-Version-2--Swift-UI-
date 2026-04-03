@@ -76,14 +76,9 @@ struct ChatView: View {
                     inputBar
                 }
             }
+            .navigationTitle("Ask Layman")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Text("Ask Layman")
-                        .font(LaymanFont.headline(18))
-                        .foregroundColor(.laymanDark)
-                }
-                
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         dismiss()
@@ -102,8 +97,16 @@ struct ChatView: View {
     
     // MARK: - Article Header
     private var articleHeader: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack(alignment: .top, spacing: 16) {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(article.laymanTitle.isEmpty ? article.title : article.laymanTitle)
+                .font(.system(size: 18, weight: .bold))
+                .foregroundColor(.laymanDark)
+                .lineLimit(nil)
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            HStack(spacing: 12) {
                 if let imageURL = article.imageURL, let url = URL(string: imageURL) {
                     AsyncImage(url: url) { phase in
                         switch phase {
@@ -111,40 +114,35 @@ struct ChatView: View {
                             image
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
-                                .frame(width: 54, height: 54)
+                                .frame(width: 44, height: 44)
                                 .clipped()
-                                .cornerRadius(12)
+                                .cornerRadius(8)
                         default:
-                            RoundedRectangle(cornerRadius: 12)
+                            RoundedRectangle(cornerRadius: 8)
                                 .fill(Color.laymanBeige)
-                                .frame(width: 54, height: 54)
+                                .frame(width: 44, height: 44)
                         }
                     }
                 }
                 
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(article.laymanTitle.isEmpty ? article.title : article.laymanTitle)
-                        .font(.system(size: 16, weight: .bold))
-                        .foregroundColor(.laymanDark)
-                        .lineLimit(nil) // FULL TITLE
-                        .multilineTextAlignment(.leading)
-                        .fixedSize(horizontal: false, vertical: true)
-                    
-                    if let source = article.sourceName {
-                        Text(source)
-                            .font(LaymanFont.small(11))
-                            .foregroundColor(.laymanOrange)
-                            .bold()
-                            .tracking(0.5)
-                    }
+                if let source = article.sourceName {
+                    Text(source)
+                        .font(LaymanFont.caption(12))
+                        .foregroundColor(.laymanOrange)
+                        .bold()
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(Color.laymanOrange.opacity(0.1))
+                        .cornerRadius(6)
                 }
                 
                 Spacer()
             }
         }
         .padding(.horizontal, 24)
-        .padding(.vertical, 16)
+        .padding(.vertical, 20)
         .background(Color.laymanWhite)
+        .shadow(color: .black.opacity(0.03), radius: 5, x: 0, y: 2)
     }
     
     // MARK: - Input Bar

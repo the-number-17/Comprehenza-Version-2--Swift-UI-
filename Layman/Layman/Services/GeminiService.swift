@@ -269,7 +269,7 @@ enum GeminiError: Error, LocalizedError, Equatable {
         case .invalidURL: return "Invalid API URL"
         case .badResponse: return "AI service unavailable. Try again."
         case .parsingError: return "Couldn't understand the AI response."
-        case .rateLimited: return "Too many requests. Please wait a moment."
+        case .rateLimited: return "Your daily AI limit has been reached. Please try again soon."
         }
     }
 }

@@ -32,11 +32,14 @@ final class ArticlesViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
         
-        do {
-            // Fetch saved article IDs first
+        // Start loading saved IDs in parallel to avoid blocking news fetch
+        Task {
             await loadSavedArticleIds()
-            
+        }
+        
+        do {
             let articles = try await newsService.fetchArticles()
+            print("🗞️ Successfully fetched \(articles.count) articles from NewsData API")
             
             // Mark saved articles
             let processed = articles.map { article -> Article in
@@ -46,20 +49,12 @@ final class ArticlesViewModel: ObservableObject {
             }
             
             allArticles = processed
-            
-            // First 5 articles for featured carousel
-            featuredArticles = Array(processed.prefix(5))
-            
-            // Remaining for Today's Picks
-            if processed.count > 5 {
-                todaysPicks = Array(processed.dropFirst(5))
-            } else {
-                todaysPicks = processed
-            }
+            updateDisplayArrays()
             
             // OPTIMIZATION: Automatic enhancement removed — only trigger manually now
             
         } catch {
+            print("❌ News fetch failed: \(error.localizedDescription)")
             errorMessage = "Couldn't load articles. Pull to refresh."
         }
         

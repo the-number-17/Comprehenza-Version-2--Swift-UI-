@@ -57,7 +57,7 @@ final class AuthViewModel: ObservableObject {
     }
     
     // MARK: - Sign Up
-    func signUp(email: String, password: String) async {
+    func signUp(email: String, password: String, name: String, age: String, phone: String) async {
         guard validate(email: email, password: password) else { return }
         
         isLoading = true
@@ -66,7 +66,12 @@ final class AuthViewModel: ObservableObject {
         do {
             let response = try await supabase.auth.signUp(
                 email: email,
-                password: password
+                password: password,
+                data: [
+                    "full_name": .string(name),
+                    "age": .string(age),
+                    "phone": .string(phone)
+                ]
             )
             
             // Check if we got a session back (auto-confirm enabled)
